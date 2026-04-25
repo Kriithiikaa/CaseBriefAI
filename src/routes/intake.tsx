@@ -25,7 +25,7 @@ export const Route = createFileRoute("/intake")({
   component: IntakePage,
   head: () => ({
     meta: [
-      { title: "CareSync — New Intake" },
+      { title: "CaseBrief AI — New Intake" },
       { name: "description", content: "Create a new case intake." },
     ],
   }),
@@ -63,31 +63,54 @@ const categories = [
 
 type RiskLevel = "Low" | "Medium" | "High" | "Critical";
 
-const riskStyles: Record<RiskLevel, { bar: string; badge: string; border: string; icon: string }> = {
-  Critical: {
-    bar: "bg-danger-soft",
-    badge: "text-destructive font-bold",
-    border: "border-l-destructive",
-    icon: "text-destructive",
-  },
-  High: {
-    bar: "bg-danger-soft",
-    badge: "text-destructive font-bold",
-    border: "border-l-destructive",
-    icon: "text-destructive",
-  },
-  Medium: {
-    bar: "bg-[oklch(0.97_0.04_75)]",
-    badge: "text-[oklch(0.5_0.15_60)] font-bold",
-    border: "border-l-[oklch(0.75_0.15_60)]",
-    icon: "text-[oklch(0.5_0.15_60)]",
-  },
-  Low: {
-    bar: "bg-success-soft",
-    badge: "text-success font-bold",
-    border: "border-l-success",
-    icon: "text-success",
-  },
+const riskStyles: Record<RiskLevel, { bar: string; badge: string; border: string; icon: string }> =
+  {
+    Critical: {
+      bar: "bg-danger-soft",
+      badge: "text-destructive font-bold",
+      border: "border-l-destructive",
+      icon: "text-destructive",
+    },
+    High: {
+      bar: "bg-danger-soft",
+      badge: "text-destructive font-bold",
+      border: "border-l-destructive",
+      icon: "text-destructive",
+    },
+    Medium: {
+      bar: "bg-[oklch(0.97_0.04_75)]",
+      badge: "text-[oklch(0.5_0.15_60)] font-bold",
+      border: "border-l-[oklch(0.75_0.15_60)]",
+      icon: "text-[oklch(0.5_0.15_60)]",
+    },
+    Low: {
+      bar: "bg-success-soft",
+      badge: "text-success font-bold",
+      border: "border-l-success",
+      icon: "text-success",
+    },
+  };
+
+type CaseBrief = {
+  caseworker_note?: string;
+  risk_assessment?: {
+    risk_level?: string;
+    risk_reasoning?: string;
+    flags?: string[];
+  };
+  case_summary?: string;
+  client_info?: {
+    name?: string;
+    age?: string | number;
+    case_type?: string;
+    visit_type?: string;
+    assigned_case_worker?: string;
+    visit_date?: string;
+  };
+  key_facts?: string[];
+  missing_information?: string[];
+  recommended_next_steps?: string[];
+  documentation_checklist?: { requirement: string; status: string; notes: string }[];
 };
 
 function IntakePage() {
@@ -99,14 +122,14 @@ function IntakePage() {
   const [jurisdiction, setJurisdiction] = useState("");
   const [jurisdictionOpen, setJurisdictionOpen] = useState(false);
   const [notes, setNotes] = useState("");
-  const [caseBrief, setCaseBrief] = useState<any>(null);
+  const [caseBrief, setCaseBrief] = useState<CaseBrief | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
 
   const wordCount = notes.trim() ? notes.trim().split(/\s+/).length : 0;
-  const canGenerate = wordCount >= 50;
+  const canGenerate = wordCount >= 15;
 
   async function handleGenerateCaseBrief() {
     if (!canGenerate) return;
@@ -120,7 +143,7 @@ function IntakePage() {
         body: JSON.stringify({
           caseType: category,
           rawNotes: notes,
-          urgencyLevel: urgency,
+          jurisdiction: jurisdiction ?? "Not stated",
         }),
       });
 
@@ -130,9 +153,9 @@ function IntakePage() {
         throw new Error(data.error || "Failed to generate case brief");
       }
 
-      setCaseBrief(data);
-    } catch (err: any) {
-      setError(err.message || "Failed to generate case brief");
+      setCaseBrief(data as CaseBrief);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to generate case brief");
     } finally {
       setIsGenerating(false);
     }
@@ -158,7 +181,9 @@ function IntakePage() {
           {/* LEFT: Intake Form */}
           <section className="border-r border-border px-8 py-6 flex flex-col">
             <div className="mb-6 text-sm text-muted-foreground">
-              <Link to="/dashboard" className="hover:text-foreground">Cases</Link>
+              <Link to="/dashboard" className="hover:text-foreground">
+                Cases
+              </Link>
               <span className="mx-2">/</span>
               <span className="font-semibold text-foreground">New Intake</span>
             </div>
@@ -177,27 +202,6 @@ function IntakePage() {
                   <span className="truncate">{category}</span>
                   <ChevronDown
                     className={`h-4 w-4 shrink-0 transition-transform ${categoryOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
-              </div>
-
-              <div>
-                <p className="mb-2 text-sm font-semibold text-foreground">Urgency Level</p>
-                <button
-                  onClick={() => {
-                    setUrgencyOpen((o) => !o);
-                    setCategoryOpen(false);
-                    setJurisdictionOpen(false);
-                  }}
-                  className={`flex w-full items-center justify-between rounded-full px-4 py-2.5 text-sm font-medium transition-colors hover:opacity-90 ${
-                    urgency === "High Risk"
-                      ? "bg-danger-soft text-destructive"
-                      : "bg-secondary text-foreground"
-                  }`}
-                >
-                  <span>{urgency}</span>
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${urgencyOpen ? "rotate-180" : ""}`}
                   />
                 </button>
               </div>
@@ -395,7 +399,9 @@ function IntakePage() {
               <>
                 {/* Top bar */}
                 <div className="mb-5 flex items-center gap-3">
-                  <div className={`flex flex-1 items-center gap-2 rounded-full px-3 py-1.5 text-xs ${styles.bar}`}>
+                  <div
+                    className={`flex flex-1 items-center gap-2 rounded-full px-3 py-1.5 text-xs ${styles.bar}`}
+                  >
                     <span className={`flex items-center gap-1.5 ${styles.badge}`}>
                       <span className="h-1.5 w-1.5 rounded-full bg-current" />
                       {riskLevel.toUpperCase()}
@@ -452,7 +458,7 @@ function IntakePage() {
                           { label: "Age", value: caseBrief.client_info?.age },
                           { label: "Case Type", value: caseBrief.client_info?.case_type },
                           { label: "Visit Type", value: caseBrief.client_info?.visit_type },
-                          { label: "Worker", value: caseBrief.client_info?.assigned_caseworker },
+                          { label: "Worker", value: caseBrief.client_info?.assigned_case_worker },
                           { label: "Visit Date", value: caseBrief.client_info?.visit_date },
                           { label: "Jurisdiction", value: jurisdiction || "[NOT STATED]" },
                         ].map((f) => (
@@ -485,13 +491,15 @@ function IntakePage() {
                         <p className="text-xs text-muted-foreground">{risk?.risk_reasoning}</p>
                       </div>
                     </div>
-                    {risk?.flags?.length > 0 && (
+                    {(risk?.flags?.length ?? 0) > 0 && (
                       <div className={`rounded-lg border border-current/20 p-3 ${styles.bar}`}>
-                        <p className={`mb-2 flex items-center gap-1.5 text-xs font-semibold ${styles.icon}`}>
+                        <p
+                          className={`mb-2 flex items-center gap-1.5 text-xs font-semibold ${styles.icon}`}
+                        >
                           <AlertTriangle className="h-3 w-3" /> FLAGS
                         </p>
                         <ul className="space-y-1 text-xs text-foreground">
-                          {risk.flags.map((flag: string) => (
+                          {risk?.flags?.map((flag: string) => (
                             <li key={flag} className="flex items-center gap-2">
                               <AlertTriangle className={`h-3 w-3 ${styles.icon}`} /> {flag}
                             </li>
@@ -503,10 +511,10 @@ function IntakePage() {
 
                   {/* Key Facts */}
                   <div className="rounded-xl border border-border bg-card p-5">
-                    <h3 className="mb-3 text-sm font-semibold text-foreground">Key Facts Extracted</h3>
-                    {caseBrief.key_facts?.length > 0 && (
+                    <h3 className="mb-3 text-sm font-semibold text-foreground">Key Facts</h3>
+                    {(caseBrief.key_facts?.length ?? 0) > 0 && (
                       <div className="mb-4 flex flex-wrap gap-2">
-                        {caseBrief.key_facts.map((fact: string) => (
+                        {caseBrief.key_facts?.map((fact: string) => (
                           <span
                             key={fact}
                             className="inline-flex items-center rounded-md border border-border bg-secondary px-2.5 py-1.5 text-xs font-medium text-foreground"
@@ -516,13 +524,13 @@ function IntakePage() {
                         ))}
                       </div>
                     )}
-                    {caseBrief.missing_information?.length > 0 && (
+                    {(caseBrief.missing_information?.length ?? 0) > 0 && (
                       <div className="rounded-lg bg-[oklch(0.97_0.04_75)] p-3">
                         <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-[oklch(0.55_0.15_60)]">
                           <AlertTriangle className="h-3 w-3" /> MISSING INFORMATION
                         </p>
                         <ul className="space-y-1 text-xs text-foreground">
-                          {caseBrief.missing_information.map((m: string) => (
+                          {caseBrief.missing_information?.map((m: string) => (
                             <li key={m} className="flex items-center gap-2">
                               <X className="h-3 w-3 text-destructive" /> {m}
                             </li>
@@ -535,7 +543,7 @@ function IntakePage() {
                   {/* Formal Note */}
                   <div className="rounded-xl border border-border bg-card p-5">
                     <div className="mb-3 flex items-center justify-between">
-                      <h3 className="text-sm font-semibold text-foreground">Formal Caseworker Note</h3>
+                      <h3 className="text-sm font-semibold text-foreground">Caseworker Notes</h3>
                       <div className="flex gap-3 text-xs text-muted-foreground">
                         <button
                           onClick={handleCopy}
@@ -562,7 +570,9 @@ function IntakePage() {
                   <div className="rounded-xl border border-border bg-card p-5 xl:col-span-2">
                     <div className="mb-3 flex items-center gap-2">
                       <ListChecks className="h-4 w-4 text-primary" />
-                      <h3 className="text-sm font-semibold text-foreground">Recommended Next Steps</h3>
+                      <h3 className="text-sm font-semibold text-foreground">
+                        Recommended Next Steps
+                      </h3>
                     </div>
                     <ol className="space-y-2.5">
                       {caseBrief.recommended_next_steps?.map((step: string, i: number) => (
@@ -580,7 +590,9 @@ function IntakePage() {
                   <div className="rounded-xl border border-border bg-card p-5 xl:col-span-2">
                     <div className="mb-3 flex items-center gap-2">
                       <ClipboardList className="h-4 w-4 text-primary" />
-                      <h3 className="text-sm font-semibold text-foreground">Intake Compliance Checklist</h3>
+                      <h3 className="text-sm font-semibold text-foreground">
+                        Documentation Checklist
+                      </h3>
                     </div>
                     <table className="w-full text-sm">
                       <thead>
@@ -593,8 +605,13 @@ function IntakePage() {
                       <tbody>
                         {caseBrief.documentation_checklist?.map(
                           (row: { requirement: string; status: string; notes: string }) => (
-                            <tr key={row.requirement} className="border-b border-border/60 last:border-0">
-                              <td className="py-3 font-medium text-foreground">{row.requirement}</td>
+                            <tr
+                              key={row.requirement}
+                              className="border-b border-border/60 last:border-0"
+                            >
+                              <td className="py-3 font-medium text-foreground">
+                                {row.requirement}
+                              </td>
                               <td className="py-3">
                                 {row.status === "Complete" ? (
                                   <Check className="h-4 w-4 text-success" />
@@ -614,28 +631,11 @@ function IntakePage() {
                                 {row.notes}
                               </td>
                             </tr>
-                          )
+                          ),
                         )}
                       </tbody>
                     </table>
                   </div>
-
-                  {/* Confidence Notes */}
-                  {caseBrief.confidence_notes?.length > 0 && (
-                    <div className="rounded-xl border border-border bg-card p-5 xl:col-span-2">
-                      <div className="mb-3 flex items-center gap-2">
-                        <Info className="h-4 w-4 text-primary" />
-                        <h3 className="text-sm font-semibold text-foreground">Confidence Notes</h3>
-                      </div>
-                      <ul className="space-y-1.5">
-                        {caseBrief.confidence_notes.map((note: string) => (
-                          <li key={note} className="flex items-start gap-2 text-xs text-muted-foreground">
-                            <Info className="mt-0.5 h-3 w-3 shrink-0 text-primary" /> {note}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                 </div>
               </>
             )}

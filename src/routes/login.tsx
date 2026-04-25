@@ -7,7 +7,7 @@ import { auth } from "@/lib/auth";
 export const Route = createFileRoute("/login")({
   component: LoginPage,
   head: () => ({
-    meta: [{ title: "CareSync — Log In" }],
+    meta: [{ title: "CaseBrief AI — Log In" }],
   }),
 });
 
@@ -56,7 +56,7 @@ function LoginPage() {
               <Shield className="h-6 w-6 text-background" fill="currentColor" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">CareSync</h1>
+              <h1 className="text-2xl font-bold text-foreground">CaseBrief AI</h1>
               <p className="mt-0.5 text-sm text-muted-foreground">Social work case management</p>
             </div>
           </Link>

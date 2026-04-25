@@ -17,11 +17,11 @@ export const Route = createFileRoute("/")({
   component: LandingPage,
   head: () => ({
     meta: [
-      { title: "CareSync — Smarter Case Management" },
+      { title: "CaseBrief AI — Smarter Case Management" },
       {
         name: "description",
         content:
-          "CareSync helps social workers manage cases, track clients, and generate AI-powered case briefs.",
+          "CaseBrief AI helps social workers manage cases, track clients, and generate AI-powered case briefs.",
       },
     ],
   }),
@@ -45,7 +45,7 @@ function LandingPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-foreground">
               <Shield className="h-4 w-4 text-background" fill="currentColor" />
             </div>
-            <span className="text-base font-semibold text-foreground">CareSync</span>
+            <span className="text-base font-semibold text-foreground">CaseBrief AI</span>
           </div>
           <div className="flex items-center gap-3">
             <Link
@@ -86,7 +86,7 @@ function LandingPage() {
             for <span className="text-primary">social workers</span>
           </h1>
           <p className="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            CareSync helps your team track clients, manage high-risk cases, schedule home visits,
+            CaseBrief AI helps your team track clients, manage high-risk cases, schedule home visits,
             and generate compliant case notes — all in one platform.
           </p>
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
@@ -152,7 +152,7 @@ function LandingPage() {
             Ready to manage your caseload smarter?
           </h2>
           <p className="mb-10 text-muted-foreground">
-            Join caseworkers and agencies already using CareSync to cut paperwork and focus on
+            Join caseworkers and agencies already using CaseBrief AI to cut paperwork and focus on
             clients.
           </p>
           <Link

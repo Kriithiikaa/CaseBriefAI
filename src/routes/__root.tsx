@@ -29,8 +29,8 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CareSync" },
-      { name: "description", content: "CareSync social work case management platform." },
+      { title: "CaseBrief AI" },
+      { name: "description", content: "CaseBrief AI social work case management platform." },
     ],
     links: [
       {

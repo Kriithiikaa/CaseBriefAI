@@ -1,8 +1,7 @@
-const KEY = "caresync_authed";
+const KEY = "casebriefai_authed";
 
 export const auth = {
-  isLoggedIn: (): boolean =>
-    typeof window !== "undefined" && localStorage.getItem(KEY) === "1",
+  isLoggedIn: (): boolean => typeof window !== "undefined" && localStorage.getItem(KEY) === "1",
   login: (): void => localStorage.setItem(KEY, "1"),
   logout: (): void => localStorage.removeItem(KEY),
 };

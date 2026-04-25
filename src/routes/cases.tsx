@@ -2,19 +2,34 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { Sidebar } from "@/components/dashboard/Sidebar";
-import { FolderOpen, Search, Plus, AlertTriangle, Clock, CheckCircle2, CircleDot } from "lucide-react";
+import {
+  FolderOpen,
+  Search,
+  Plus,
+  AlertTriangle,
+  Clock,
+  CheckCircle2,
+  CircleDot,
+} from "lucide-react";
 
 export const Route = createFileRoute("/cases")({
   component: CasesPage,
   head: () => ({
     meta: [
-      { title: "CareSync — Cases" },
+      { title: "CaseBrief AI — Cases" },
       { name: "description", content: "All active cases." },
     ],
   }),
 });
 
-type Tag = "Child & Family Services" | "Child Care" | "Public Health" | "Behavioural Care" | "Housing Assistance" | "Aging & Disbility" | "Violence";
+type Tag =
+  | "Child & Family Services"
+  | "Child Care"
+  | "Public Health"
+  | "Behavioural Care"
+  | "Housing Assistance"
+  | "Aging & Disbility"
+  | "Violence";
 type Status = "Open" | "In Progress" | "Pending Review" | "Closed";
 type Risk = "High" | "Medium" | "Low";
 
@@ -82,13 +97,19 @@ const SEED: Case[] = [
 ];
 
 const TAG_STYLES: Record<Tag, string> = {
-  "Child & Family Services": "bg-[oklch(0.95_0.04_15)] text-[oklch(0.45_0.18_15)] border-[oklch(0.85_0.08_15)]",
-  "Child Care": "bg-[oklch(0.95_0.04_240)] text-[oklch(0.45_0.12_240)] border-[oklch(0.85_0.08_240)]",
-  "Public Health": "bg-[oklch(0.95_0.04_280)] text-[oklch(0.45_0.12_280)] border-[oklch(0.85_0.08_280)]",
-  "Behavioural Care": "bg-[oklch(0.95_0.06_60)] text-[oklch(0.45_0.15_60)] border-[oklch(0.85_0.1_60)]",
-  "Housing Assistance": "bg-[oklch(0.95_0.04_150)] text-[oklch(0.45_0.12_150)] border-[oklch(0.85_0.08_150)]",
-  "Aging & Disbility": "bg-[oklch(0.95_0.04_175)] text-[oklch(0.45_0.12_175)] border-[oklch(0.85_0.08_175)]",
-  "Violence": "bg-[oklch(0.95_0.04_95)] text-[oklch(0.45_0.15_95)] border-[oklch(0.85_0.1_95)]",
+  "Child & Family Services":
+    "bg-[oklch(0.95_0.04_15)] text-[oklch(0.45_0.18_15)] border-[oklch(0.85_0.08_15)]",
+  "Child Care":
+    "bg-[oklch(0.95_0.04_240)] text-[oklch(0.45_0.12_240)] border-[oklch(0.85_0.08_240)]",
+  "Public Health":
+    "bg-[oklch(0.95_0.04_280)] text-[oklch(0.45_0.12_280)] border-[oklch(0.85_0.08_280)]",
+  "Behavioural Care":
+    "bg-[oklch(0.95_0.06_60)] text-[oklch(0.45_0.15_60)] border-[oklch(0.85_0.1_60)]",
+  "Housing Assistance":
+    "bg-[oklch(0.95_0.04_150)] text-[oklch(0.45_0.12_150)] border-[oklch(0.85_0.08_150)]",
+  "Aging & Disbility":
+    "bg-[oklch(0.95_0.04_175)] text-[oklch(0.45_0.12_175)] border-[oklch(0.85_0.08_175)]",
+  Violence: "bg-[oklch(0.95_0.04_95)] text-[oklch(0.45_0.15_95)] border-[oklch(0.85_0.1_95)]",
 };
 
 const RISK_STYLES: Record<Risk, string> = {
@@ -98,17 +119,17 @@ const RISK_STYLES: Record<Risk, string> = {
 };
 
 const STATUS_ICON: Record<Status, typeof CircleDot> = {
-  "Open": CircleDot,
+  Open: CircleDot,
   "In Progress": Clock,
   "Pending Review": AlertTriangle,
-  "Closed": CheckCircle2,
+  Closed: CheckCircle2,
 };
 
 const STATUS_STYLE: Record<Status, string> = {
-  "Open": "text-muted-foreground",
+  Open: "text-muted-foreground",
   "In Progress": "text-primary",
   "Pending Review": "text-[oklch(0.6_0.15_60)]",
-  "Closed": "text-[oklch(0.5_0.12_150)]",
+  Closed: "text-[oklch(0.5_0.12_150)]",
 };
 
 function timeAgo(ts: number) {
@@ -124,7 +145,16 @@ function CasesPage() {
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState<Tag | "All">("All");
 
-  const tags: (Tag | "All")[] = ["All", "Violence", "Child & Family Services", "Child Care", "Behavioural Care", "Housing Assistance", "Public Health", "Aging & Disbility"];
+  const tags: (Tag | "All")[] = [
+    "All",
+    "Violence",
+    "Child & Family Services",
+    "Child Care",
+    "Behavioural Care",
+    "Housing Assistance",
+    "Public Health",
+    "Aging & Disbility",
+  ];
 
   const filtered = SEED.filter((c) => {
     const matchTag = activeTag === "All" || c.tag === activeTag;
@@ -159,7 +189,8 @@ function CasesPage() {
               <div>
                 <h1 className="text-3xl font-bold tracking-tight text-foreground">Cases</h1>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  {SEED.length} active cases · {SEED.filter((c) => c.risk === "High").length} high risk
+                  {SEED.length} active cases · {SEED.filter((c) => c.risk === "High").length} high
+                  risk
                 </p>
               </div>
             </div>
@@ -223,7 +254,9 @@ function CasesPage() {
                           >
                             {c.tag}
                           </span>
-                          <span className={`flex items-center gap-1 text-xs font-medium ${STATUS_STYLE[c.status]}`}>
+                          <span
+                            className={`flex items-center gap-1 text-xs font-medium ${STATUS_STYLE[c.status]}`}
+                          >
                             <StatusIcon className="h-3.5 w-3.5" />
                             {c.status}
                           </span>
@@ -240,7 +273,8 @@ function CasesPage() {
                             Client: <span className="font-medium text-foreground">{c.client}</span>
                           </span>
                           <span>
-                            Assigned: <span className="font-medium text-foreground">{c.assignee}</span>
+                            Assigned:{" "}
+                            <span className="font-medium text-foreground">{c.assignee}</span>
                           </span>
                           <span>Updated {timeAgo(c.updatedAt)}</span>
                         </div>

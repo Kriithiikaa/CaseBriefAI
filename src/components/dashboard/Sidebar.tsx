@@ -101,7 +101,7 @@ export function Sidebar() {
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-foreground">
           <Shield className="h-5 w-5 text-background" fill="currentColor" />
         </div>
-        {!collapsed && <span className="text-lg font-semibold text-foreground">CareSync</span>}
+        {!collapsed && <span className="text-lg font-semibold text-foreground">CaseBrief AI</span>}
       </div>
 
       <nav className="flex-1 space-y-1">

@@ -10,13 +10,22 @@ export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
   head: () => ({
     meta: [
-      { title: "CareSync — Overview" },
-      { name: "description", content: "CareSync social work case management dashboard." },
+      { title: "CareBrief AI — Overview" },
+      { name: "description", content: "CareBrief AI social work case management dashboard." },
     ],
   }),
 });
 
-const tabs = ["All Cases", "Housing", "Health", "Child Care", "Violence", "Support", "Disability", "Behavioural"];
+const tabs = [
+  "All Cases",
+  "Housing",
+  "Health",
+  "Child Care",
+  "Violence",
+  "Support",
+  "Disability",
+  "Behavioural",
+];
 
 function DashboardPage() {
   return (

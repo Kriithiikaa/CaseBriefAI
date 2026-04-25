@@ -1,21 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AuthGuard } from "@/components/AuthGuard";
-import {
-  Search,
-  Pin,
-  PinOff,
-  Trash2,
-  Plus,
-  StickyNote,
-} from "lucide-react";
+import { Search, Pin, PinOff, Trash2, Plus, StickyNote } from "lucide-react";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 
 export const Route = createFileRoute("/notes")({
   component: NotesPage,
   head: () => ({
     meta: [
-      { title: "CareSync — Notes" },
+      { title: "CaseBrief AI — Notes" },
       { name: "description", content: "Caseworker quick notes, Google Keep style." },
     ],
   }),
@@ -152,133 +145,133 @@ function NotesPage() {
 
   return (
     <AuthGuard>
-    <div className="flex min-h-screen bg-background">
-      <Sidebar />
+      <div className="flex min-h-screen bg-background">
+        <Sidebar />
 
-      <main className="flex-1 px-8 py-6">
-        <div className="mb-6 text-sm text-muted-foreground">
-          <Link to="/dashboard" className="hover:text-foreground">
-            Home
-          </Link>
-          <span className="mx-2">/</span>
-          <span className="font-semibold text-foreground">Notes</span>
-        </div>
-
-        <header className="mb-6 flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
-              <StickyNote className="h-5 w-5" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight text-foreground">Notes</h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Quick caseworker notes — pin the important ones.
-              </p>
-            </div>
+        <main className="flex-1 px-8 py-6">
+          <div className="mb-6 text-sm text-muted-foreground">
+            <Link to="/dashboard" className="hover:text-foreground">
+              Home
+            </Link>
+            <span className="mx-2">/</span>
+            <span className="font-semibold text-foreground">Notes</span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2">
-              <Search className="h-4 w-4 text-muted-foreground" />
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search notes..."
-                className="w-64 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-              />
-            </div>
-            <button
-              onClick={() => setComposerOpen(true)}
-              className="flex h-10 items-center gap-2 rounded-lg bg-foreground px-4 text-sm font-semibold text-background hover:opacity-90"
-            >
-              <Plus className="h-4 w-4" /> New note
-            </button>
-          </div>
-        </header>
-
-        {/* Composer */}
-        <div className="mx-auto mb-8 max-w-2xl">
-          {!composerOpen ? (
-            <button
-              onClick={() => setComposerOpen(true)}
-              className="flex w-full items-center gap-3 rounded-xl border border-border bg-card px-4 py-3.5 text-left text-sm text-muted-foreground shadow-sm hover:bg-secondary"
-            >
-              <Plus className="h-4 w-4" /> Take a note...
-            </button>
-          ) : (
-            <div
-              className={`rounded-xl border p-4 shadow-md transition-colors ${COLOR_CLASSES[draft.color]}`}
-            >
-              <input
-                autoFocus
-                value={draft.title}
-                onChange={(e) => setDraft((d) => ({ ...d, title: e.target.value }))}
-                placeholder="Title"
-                className="w-full bg-transparent text-base font-semibold text-foreground outline-none placeholder:text-muted-foreground"
-              />
-              <textarea
-                value={draft.body}
-                onChange={(e) => setDraft((d) => ({ ...d, body: e.target.value }))}
-                placeholder="Take a note..."
-                rows={3}
-                className="mt-2 w-full resize-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-              />
-              <div className="mt-3 flex items-center justify-between">
-                <ColorPicker
-                  value={draft.color}
-                  onChange={(c) => setDraft((d) => ({ ...d, color: c }))}
-                />
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => {
-                      setDraft({ title: "", body: "", color: "default" });
-                      setComposerOpen(false);
-                    }}
-                    className="rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={addNote}
-                    className="rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background hover:opacity-90"
-                  >
-                    Save
-                  </button>
-                </div>
+          <header className="mb-6 flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
+                <StickyNote className="h-5 w-5" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight text-foreground">Notes</h1>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Quick caseworker notes — pin the important ones.
+                </p>
               </div>
             </div>
-          )}
-        </div>
 
-        {filtered.length === 0 ? (
-          <div className="mt-20 flex flex-col items-center text-center text-muted-foreground">
-            <StickyNote className="mb-3 h-10 w-10 opacity-40" />
-            <p className="text-sm">No notes match your search.</p>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2">
+                <Search className="h-4 w-4 text-muted-foreground" />
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search notes..."
+                  className="w-64 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                />
+              </div>
+              <button
+                onClick={() => setComposerOpen(true)}
+                className="flex h-10 items-center gap-2 rounded-lg bg-foreground px-4 text-sm font-semibold text-background hover:opacity-90"
+              >
+                <Plus className="h-4 w-4" /> New note
+              </button>
+            </div>
+          </header>
+
+          {/* Composer */}
+          <div className="mx-auto mb-8 max-w-2xl">
+            {!composerOpen ? (
+              <button
+                onClick={() => setComposerOpen(true)}
+                className="flex w-full items-center gap-3 rounded-xl border border-border bg-card px-4 py-3.5 text-left text-sm text-muted-foreground shadow-sm hover:bg-secondary"
+              >
+                <Plus className="h-4 w-4" /> Take a note...
+              </button>
+            ) : (
+              <div
+                className={`rounded-xl border p-4 shadow-md transition-colors ${COLOR_CLASSES[draft.color]}`}
+              >
+                <input
+                  autoFocus
+                  value={draft.title}
+                  onChange={(e) => setDraft((d) => ({ ...d, title: e.target.value }))}
+                  placeholder="Title"
+                  className="w-full bg-transparent text-base font-semibold text-foreground outline-none placeholder:text-muted-foreground"
+                />
+                <textarea
+                  value={draft.body}
+                  onChange={(e) => setDraft((d) => ({ ...d, body: e.target.value }))}
+                  placeholder="Take a note..."
+                  rows={3}
+                  className="mt-2 w-full resize-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+                />
+                <div className="mt-3 flex items-center justify-between">
+                  <ColorPicker
+                    value={draft.color}
+                    onChange={(c) => setDraft((d) => ({ ...d, color: c }))}
+                  />
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        setDraft({ title: "", body: "", color: "default" });
+                        setComposerOpen(false);
+                      }}
+                      className="rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={addNote}
+                      className="rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background hover:opacity-90"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-        ) : (
-          <>
-            {pinned.length > 0 && (
-              <Section
-                title="Pinned"
-                notes={pinned}
-                onPin={togglePin}
-                onDelete={remove}
-                onColor={setColor}
-              />
-            )}
-            {others.length > 0 && (
-              <Section
-                title={pinned.length > 0 ? "Others" : "All notes"}
-                notes={others}
-                onPin={togglePin}
-                onDelete={remove}
-                onColor={setColor}
-              />
-            )}
-          </>
-        )}
-      </main>
-    </div>
+
+          {filtered.length === 0 ? (
+            <div className="mt-20 flex flex-col items-center text-center text-muted-foreground">
+              <StickyNote className="mb-3 h-10 w-10 opacity-40" />
+              <p className="text-sm">No notes match your search.</p>
+            </div>
+          ) : (
+            <>
+              {pinned.length > 0 && (
+                <Section
+                  title="Pinned"
+                  notes={pinned}
+                  onPin={togglePin}
+                  onDelete={remove}
+                  onColor={setColor}
+                />
+              )}
+              {others.length > 0 && (
+                <Section
+                  title={pinned.length > 0 ? "Others" : "All notes"}
+                  notes={others}
+                  onPin={togglePin}
+                  onDelete={remove}
+                  onColor={setColor}
+                />
+              )}
+            </>
+          )}
+        </main>
+      </div>
     </AuthGuard>
   );
 }
@@ -376,7 +369,9 @@ function ColorPicker({
             onClick={() => onChange(s.key)}
             aria-label={`Color ${s.key}`}
             className={`${compact ? "h-4 w-4" : "h-5 w-5"} rounded-full border ${s.bg} ${
-              active ? "ring-2 ring-foreground ring-offset-1 ring-offset-background" : "border-border"
+              active
+                ? "ring-2 ring-foreground ring-offset-1 ring-offset-background"
+                : "border-border"
             }`}
           />
         );
