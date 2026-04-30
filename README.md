@@ -2,7 +2,7 @@
 
 > **Built for the c0mpiled.sh/DC - AI for Government Hackathon**
 
-CaseBrief is an AI-powered social work case management web app that helps caseworkers track clients, manage active cases, schedule appointments, and generate structured case briefs from raw intake notes — in seconds.
+CaseBrief is an AI-powered social work case management web app that helps caseworkers track clients, manage active cases, schedule appointments, and generate structured case briefs from raw intake notes.
 
 ---
 
